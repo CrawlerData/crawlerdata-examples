@@ -29,6 +29,17 @@ export CRAWLERDATA_API_KEY=your_key
 
 Python examples need `requests` (`pip install requests`). Node examples need Node 18 or newer and no packages.
 
+## No-code templates
+
+| Template | What it does |
+|---|---|
+| [Google Sheets price tracker](google-sheets/) | A **CrawlerData** menu in Google Sheets: list products, click *Check prices now*, get the lowest Google Shopping price, merchant and seller count in a History sheet. Optional daily check. |
+| [n8n: Google Shopping prices → Sheets](n8n/google-shopping-prices-to-google-sheets.json) | Daily top-5 offers for your products appended to a Google Sheet. |
+| [n8n: daily rank tracker → Sheets](n8n/daily-rank-tracker-to-google-sheets.json) | Your domain's position per keyword, country and device, and whether Google's AI Overview cites you. |
+| [n8n: AI Overview monitor → Slack](n8n/ai-overview-monitor-to-slack.json) | A morning Slack report: which keywords show an AI Overview and whether it cites your domain. |
+
+Setup notes for the n8n workflows are in [n8n/README.md](n8n/README.md).
+
 ## Full scripts
 
 - [`python/google_shopping_sellers_to_csv.py`](python/google_shopping_sellers_to_csv.py) searches Google Shopping, picks a product and writes every seller's price, shipping and total to CSV, with retries. Walkthrough: [How to scrape Google Shopping prices with Python](https://crawlerdata.com/blog/scrape-google-shopping-prices-python).

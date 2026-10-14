@@ -1,0 +1,175 @@
+{
+  "name": "CrawlerData: Google AI Overview monitor to Slack",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "id": "e5db7869-3a76-4352-9343-064ac48bf48d",
+      "name": "Every day at 08:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "47d95e02-20a3-4942-9c17-690aa8f9e1dc",
+      "name": "Test run",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Keywords to watch, and the domain you want Google's AI Overview to cite.\nreturn [\n  { json: { keyword: 'best crm for small business', country: 'us', domain: 'hubspot.com' } },\n  { json: { keyword: 'crm software', country: 'gb', domain: 'hubspot.com' } },\n];"
+      },
+      "id": "4e9c24c9-dc04-4a88-b9bb-7be946d82252",
+      "name": "Keywords to watch",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.crawlerdata.com/v1/jobs",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ endpoint: 'google-search', params: { query: $json.keyword, country: $json.country, device: $json.device || 'desktop' }, queue: 'live' }) }}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 1000
+            }
+          },
+          "timeout": 200000
+        }
+      },
+      "id": "56b8f7a6-e0d8-4aab-b884-2e2e72cb3983",
+      "name": "CrawlerData: Google Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        100
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "CrawlerData API key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Builds one Slack message: for each keyword, whether Google shows an AI Overview,\n// whether it cites your domain, and the first sources it cites.\nconst inputs = $('Keywords to watch').all();\nconst host = (u) => { try { return new URL(u).hostname.replace(/^www\\./, ''); } catch { return ''; } };\nconst lines = $input.all().map((item, i) => {\n  const { keyword, country, domain } = inputs[i].json;\n  const { job, result } = item.json;\n  if (!job || job.status !== 'completed') return `• *${keyword}* (${country}): request failed, not charged`;\n  const ai = result.ai_overview;\n  if (!ai) return `• *${keyword}* (${country}): no AI Overview`;\n  const sources = [...new Set((ai.sources || []).map((s) => host(s.link)).filter(Boolean))];\n  const cited = sources.some((h) => h === domain || h.endsWith('.' + domain));\n  return `• *${keyword}* (${country}): AI Overview ${cited ? 'cites ' + domain + ' :white_check_mark:' : 'does not cite ' + domain + ' :x:'}  (sources: ${sources.slice(0, 4).join(', ') || 'none'})`;\n});\nreturn [{ json: { text: `*Google AI Overview report, ${new Date().toISOString().slice(0, 10)}*\\n` + lines.join('\\n') } }];"
+      },
+      "id": "2af63693-5abb-49cd-b85c-760055a00561",
+      "name": "Build the report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/REPLACE/WITH/YOUR-WEBHOOK",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: $json.text }) }}",
+        "options": {}
+      },
+      "id": "1fa035bc-6e8f-4fb0-8ff8-b0188e83b890",
+      "name": "Post to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        100
+      ]
+    }
+  ],
+  "connections": {
+    "Keywords to watch": {
+      "main": [
+        [
+          {
+            "node": "CrawlerData: Google Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CrawlerData: Google Search": {
+      "main": [
+        [
+          {
+            "node": "Build the report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build the report": {
+      "main": [
+        [
+          {
+            "node": "Post to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Every day at 08:00": {
+      "main": [
+        [
+          {
+            "node": "Keywords to watch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Test run": {
+      "main": [
+        [
+          {
+            "node": "Keywords to watch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
