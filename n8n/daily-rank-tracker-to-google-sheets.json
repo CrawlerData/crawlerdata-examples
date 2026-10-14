@@ -1,0 +1,186 @@
+{
+  "name": "CrawlerData: daily Google rank tracker to Google Sheets",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "id": "c21f8d7d-883d-409a-8aac-7b47b9ecac03",
+      "name": "Every day at 07:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "7fd5548f-88de-46be-88a9-3634f11bb74e",
+      "name": "Test run",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// One item per keyword to track. Edit this list.\n// domain: the site whose position you want (no https://, no www).\nreturn [\n  { json: { keyword: 'running shoes', country: 'us', device: 'desktop', domain: 'nike.com' } },\n  { json: { keyword: 'running shoes', country: 'us', device: 'mobile', domain: 'nike.com' } },\n  { json: { keyword: 'trail running shoes', country: 'gb', device: 'desktop', domain: 'nike.com' } },\n];"
+      },
+      "id": "ebb2439a-1a22-4ea0-bb7f-0077c7840528",
+      "name": "Keywords to track",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.crawlerdata.com/v1/jobs",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ endpoint: 'google-search', params: { query: $json.keyword, country: $json.country, device: $json.device || 'desktop' }, queue: 'live' }) }}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 1000
+            }
+          },
+          "timeout": 200000
+        }
+      },
+      "id": "e472ef5c-d32a-4937-a5e6-beae343d09c8",
+      "name": "CrawlerData: Google Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        100
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "CrawlerData API key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// One row per keyword: your best organic position (blank if not in the top results),\n// the ranking URL, and whether Google showed an AI Overview that cites your domain.\nconst inputs = $('Keywords to track').all();\nconst day = new Date().toISOString().slice(0, 10);\nconst host = (u) => { try { return new URL(u).hostname.replace(/^www\\./, ''); } catch { return ''; } };\nreturn $input.all().map((item, i) => {\n  const { keyword, country, device, domain } = inputs[i].json;\n  const { job, result } = item.json;\n  if (!job || job.status !== 'completed') {\n    return { json: { date: day, keyword, country, device, domain, position: '', url: '', title: '', ai_overview: '', ai_overview_cites_you: '', note: 'request failed (not charged)' } };\n  }\n  const mine = (u) => { const h = host(u); return h === domain || h.endsWith('.' + domain); };\n  const hit = (result.organic_results || []).find((o) => mine(o.link));\n  const ai = result.ai_overview;\n  return { json: {\n    date: day, keyword, country, device, domain,\n    position: hit ? hit.position : '',\n    url: hit ? hit.link : '',\n    title: hit ? hit.title : '',\n    ai_overview: ai ? 'yes' : 'no',\n    ai_overview_cites_you: ai ? ((ai.sources || []).some((s) => mine(s.link)) ? 'yes' : 'no') : '',\n    note: '',\n  } };\n});"
+      },
+      "id": "9b5d0c59-10b7-4bd2-a696-799cd10d7e94",
+      "name": "Find your position",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "sheet",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Rankings"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {}
+        },
+        "options": {}
+      },
+      "id": "d753a280-b3cb-4b09-91a4-25922f60d3da",
+      "name": "Append to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        960,
+        100
+      ]
+    }
+  ],
+  "connections": {
+    "Keywords to track": {
+      "main": [
+        [
+          {
+            "node": "CrawlerData: Google Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CrawlerData: Google Search": {
+      "main": [
+        [
+          {
+            "node": "Find your position",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find your position": {
+      "main": [
+        [
+          {
+            "node": "Append to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Every day at 07:00": {
+      "main": [
+        [
+          {
+            "node": "Keywords to track",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Test run": {
+      "main": [
+        [
+          {
+            "node": "Keywords to track",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
