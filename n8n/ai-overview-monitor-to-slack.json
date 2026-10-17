@@ -109,6 +109,38 @@
         960,
         100
       ]
+    },
+    {
+      "parameters": {
+        "content": "## Google AI Overview monitor\nEvery morning this checks your keywords on Google (through the CrawlerData API), tells you whether Google shows an **AI Overview**, whether it **cites your domain**, and posts the result to Slack.\n\n1 CrawlerData credit per keyword per run.",
+        "height": 200,
+        "width": 420,
+        "color": 4
+      },
+      "id": "2a894717-cb87-4cb5-a2cc-c1af9fce791f",
+      "name": "Sticky: What this does",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -380
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Setup\n1. Create a CrawlerData API key at https://app.crawlerdata.com (50 free credits on sign-up).\n2. Add an **HTTP Header Auth** credential: header `Authorization`, value `Bearer YOUR_API_KEY`, and select it in the CrawlerData request node.\n3. Create a Slack incoming webhook and paste its URL in the Slack node.\n4. Edit the keyword list and your domain in the first Code node, click **Test workflow**, then activate.",
+        "height": 260,
+        "width": 460,
+        "color": 4
+      },
+      "id": "93bbe579-1281-4f37-b012-323295c84493",
+      "name": "Sticky: Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        420,
+        -380
+      ]
     }
   ],
   "connections": {
