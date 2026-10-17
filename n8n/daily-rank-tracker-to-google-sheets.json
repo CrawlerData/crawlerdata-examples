@@ -120,6 +120,38 @@
         960,
         100
       ]
+    },
+    {
+      "parameters": {
+        "content": "## Daily Google rank tracker\nFor each keyword, country and device this finds your domain's organic position on Google, and whether Google's AI Overview cites you, then appends one row per keyword to a Google Sheet.\n\n1 CrawlerData credit per keyword per run.",
+        "height": 200,
+        "width": 420,
+        "color": 4
+      },
+      "id": "22dc17f6-2a44-4889-8504-e07a579d5725",
+      "name": "Sticky: What this does",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -380
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Setup\n1. Create a CrawlerData API key at https://app.crawlerdata.com (50 free credits on sign-up).\n2. Add an **HTTP Header Auth** credential: header `Authorization`, value `Bearer YOUR_API_KEY`, and select it in the CrawlerData request node.\n3. Connect Google Sheets in the append node and paste your spreadsheet URL (tab name `Rankings`).\n4. Edit the keywords and your domain in the first Code node, click **Test workflow**, then activate.",
+        "height": 260,
+        "width": 460,
+        "color": 4
+      },
+      "id": "d4777860-039b-4453-9239-8aa07fa37d65",
+      "name": "Sticky: Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        420,
+        -380
+      ]
     }
   ],
   "connections": {
