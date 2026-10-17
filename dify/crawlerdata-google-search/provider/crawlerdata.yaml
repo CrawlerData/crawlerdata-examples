@@ -1,0 +1,27 @@
+identity:
+  author: crawlerdata
+  name: crawlerdata
+  label:
+    en_US: CrawlerData
+  description:
+    en_US: Google Search and Google News results with the AI Overview, from the CrawlerData API.
+  icon: icon.svg
+  tags:
+    - search
+credentials_for_provider:
+  api_key:
+    type: secret-input
+    required: true
+    label:
+      en_US: CrawlerData API key
+    placeholder:
+      en_US: Paste your CrawlerData API key
+    help:
+      en_US: Create a key at app.crawlerdata.com. New accounts with a verified work email get 50 free credits.
+    url: https://app.crawlerdata.com
+tools:
+  - tools/google_search.yaml
+  - tools/google_news.yaml
+extra:
+  python:
+    source: provider/crawlerdata.py

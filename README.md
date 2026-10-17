@@ -38,6 +38,7 @@ Python examples need `requests` (`pip install requests`). Node examples need Nod
 | [n8n: daily rank tracker → Sheets](n8n/daily-rank-tracker-to-google-sheets.json) | Your domain's position per keyword, country and device, and whether Google's AI Overview cites you. |
 | [n8n: AI Overview monitor → Slack](n8n/ai-overview-monitor-to-slack.json) | A morning Slack report: which keywords show an AI Overview and whether it cites your domain. |
 | [Open WebUI tool: Google Search](open-webui/) | Gives your Open WebUI models live Google results with the AI Overview and its sources, plus Google News. |
+| [Dify plugin: Google Search](dify/crawlerdata-google-search/) | A Dify tool plugin with Google Search (AI Overview + sources) and Google News for workflows and agents. |
 
 Setup notes for the n8n workflows are in [n8n/README.md](n8n/README.md).
 

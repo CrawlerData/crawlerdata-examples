@@ -1,0 +1,42 @@
+identity:
+  name: google_search
+  author: crawlerdata
+  label:
+    en_US: Google Search
+description:
+  human:
+    en_US: Search Google and get the top results, Google's AI Overview with the pages it cites (when Google shows one), and related questions.
+  llm: Search Google for current information. Returns the top organic results, Google's AI Overview text with its cited sources when present, and related questions. Input is a search query.
+parameters:
+  - name: query
+    type: string
+    required: true
+    label:
+      en_US: Query
+    human_description:
+      en_US: What to search for.
+    llm_description: The search query.
+    form: llm
+  - name: country
+    type: string
+    required: false
+    default: us
+    label:
+      en_US: Country
+    human_description:
+      en_US: Two-letter country code for the results, for example us, gb, de.
+    llm_description: Two-letter country code, for example us or gb.
+    form: form
+  - name: max_results
+    type: number
+    required: false
+    default: 8
+    label:
+      en_US: Max results
+    human_description:
+      en_US: Maximum number of organic results to return.
+    llm_description: Maximum number of organic results.
+    form: form
+extra:
+  python:
+    source: tools/google_search.py

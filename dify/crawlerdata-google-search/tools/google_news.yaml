@@ -1,0 +1,42 @@
+identity:
+  name: google_news
+  author: crawlerdata
+  label:
+    en_US: Google News
+description:
+  human:
+    en_US: Search Google News for recent articles about a topic.
+  llm: Search Google News for recent articles. Returns titles, sources, dates, links and snippets. Input is a topic or query.
+parameters:
+  - name: query
+    type: string
+    required: true
+    label:
+      en_US: Query
+    human_description:
+      en_US: The news topic.
+    llm_description: The news topic or query.
+    form: llm
+  - name: country
+    type: string
+    required: false
+    default: us
+    label:
+      en_US: Country
+    human_description:
+      en_US: Two-letter country code for the results, for example us, gb, de.
+    llm_description: Two-letter country code, for example us or gb.
+    form: form
+  - name: max_results
+    type: number
+    required: false
+    default: 8
+    label:
+      en_US: Max results
+    human_description:
+      en_US: Maximum number of articles to return.
+    llm_description: Maximum number of articles.
+    form: form
+extra:
+  python:
+    source: tools/google_news.py
