@@ -1,0 +1,376 @@
+{
+  "info": {
+    "name": "CrawlerData: Google Search (SERP) and Shopping API",
+    "description": "Google Search (SERP) data as JSON from the CrawlerData API: organic results, AI Overview with sources, People Also Ask, News, Images, Local, Autocomplete and Google Shopping. 1 credit per request, failed requests are not charged. Set the collection variable api_key (create one at https://app.crawlerdata.com; new accounts with a verified work email get free trial credits). Docs: https://crawlerdata.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "api_key",
+      "value": "",
+      "type": "secret"
+    }
+  ],
+  "item": [
+    {
+      "name": "Google Search (with AI Overview)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{api_key}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"endpoint\": \"google-search\",\n  \"params\": {\n    \"query\": \"what is a serp api\",\n    \"country\": \"us\",\n    \"language\": \"en\",\n    \"device\": \"desktop\",\n    \"page\": 1\n  },\n  \"queue\": \"live\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api.crawlerdata.com/v1/jobs",
+          "protocol": "https",
+          "host": [
+            "api",
+            "crawlerdata",
+            "com"
+          ],
+          "path": [
+            "v1",
+            "jobs"
+          ]
+        },
+        "description": "Organic results, ads, AI Overview (text and cited sources), People Also Ask, local pack, top stories, knowledge panel and related searches. device: desktop or mobile."
+      },
+      "response": []
+    },
+    {
+      "name": "Google Search by city",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{api_key}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"endpoint\": \"google-search\",\n  \"params\": {\n    \"query\": \"coffee shops\",\n    \"country\": \"us\",\n    \"location\": \"Austin,Texas,United States\"\n  },\n  \"queue\": \"live\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api.crawlerdata.com/v1/jobs",
+          "protocol": "https",
+          "host": [
+            "api",
+            "crawlerdata",
+            "com"
+          ],
+          "path": [
+            "v1",
+            "jobs"
+          ]
+        },
+        "description": "Results as seen from one city: location is the canonical city name."
+      },
+      "response": []
+    },
+    {
+      "name": "Google News",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{api_key}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"endpoint\": \"google-news\",\n  \"params\": {\n    \"query\": \"nvidia\",\n    \"country\": \"us\"\n  },\n  \"queue\": \"live\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api.crawlerdata.com/v1/jobs",
+          "protocol": "https",
+          "host": [
+            "api",
+            "crawlerdata",
+            "com"
+          ],
+          "path": [
+            "v1",
+            "jobs"
+          ]
+        },
+        "description": "News results with source, date and snippet."
+      },
+      "response": []
+    },
+    {
+      "name": "Google Images",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{api_key}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"endpoint\": \"google-images\",\n  \"params\": {\n    \"query\": \"golden retriever\",\n    \"country\": \"us\"\n  },\n  \"queue\": \"live\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api.crawlerdata.com/v1/jobs",
+          "protocol": "https",
+          "host": [
+            "api",
+            "crawlerdata",
+            "com"
+          ],
+          "path": [
+            "v1",
+            "jobs"
+          ]
+        },
+        "description": "Image results with the original image URL, size and source page."
+      },
+      "response": []
+    },
+    {
+      "name": "Google Local",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{api_key}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"endpoint\": \"google-local\",\n  \"params\": {\n    \"query\": \"coffee shops in austin tx\",\n    \"country\": \"us\"\n  },\n  \"queue\": \"live\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api.crawlerdata.com/v1/jobs",
+          "protocol": "https",
+          "host": [
+            "api",
+            "crawlerdata",
+            "com"
+          ],
+          "path": [
+            "v1",
+            "jobs"
+          ]
+        },
+        "description": "Local businesses with rating, reviews, address and phone."
+      },
+      "response": []
+    },
+    {
+      "name": "Google Autocomplete",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{api_key}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"endpoint\": \"google-autocomplete\",\n  \"params\": {\n    \"query\": \"running sho\",\n    \"country\": \"us\"\n  },\n  \"queue\": \"live\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api.crawlerdata.com/v1/jobs",
+          "protocol": "https",
+          "host": [
+            "api",
+            "crawlerdata",
+            "com"
+          ],
+          "path": [
+            "v1",
+            "jobs"
+          ]
+        },
+        "description": "Search suggestions for a partial query."
+      },
+      "response": []
+    },
+    {
+      "name": "Google Shopping: search products",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{api_key}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"endpoint\": \"google-shopping-search\",\n  \"params\": {\n    \"query\": \"wireless headphones\",\n    \"country\": \"us\"\n  },\n  \"queue\": \"live\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api.crawlerdata.com/v1/jobs",
+          "protocol": "https",
+          "host": [
+            "api",
+            "crawlerdata",
+            "com"
+          ],
+          "path": [
+            "v1",
+            "jobs"
+          ]
+        },
+        "description": "Shopping offers with title, price, merchant and product_id."
+      },
+      "response": []
+    },
+    {
+      "name": "Google Shopping: sellers for a product",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{api_key}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"endpoint\": \"google-shopping-product\",\n  \"params\": {\n    \"product_id\": \"14580532573920022357\",\n    \"country\": \"us\"\n  },\n  \"queue\": \"live\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api.crawlerdata.com/v1/jobs",
+          "protocol": "https",
+          "host": [
+            "api",
+            "crawlerdata",
+            "com"
+          ],
+          "path": [
+            "v1",
+            "jobs"
+          ]
+        },
+        "description": "Every seller of a product in one request. 1 credit per 10 sellers returned."
+      },
+      "response": []
+    },
+    {
+      "name": "Google Shopping: product details",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{api_key}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"endpoint\": \"google-shopping-product-info\",\n  \"params\": {\n    \"product_id\": \"14580532573920022357\",\n    \"country\": \"us\"\n  },\n  \"queue\": \"live\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api.crawlerdata.com/v1/jobs",
+          "protocol": "https",
+          "host": [
+            "api",
+            "crawlerdata",
+            "com"
+          ],
+          "path": [
+            "v1",
+            "jobs"
+          ]
+        },
+        "description": "Title, brand, description, specs, images, rating and price."
+      },
+      "response": []
+    }
+  ]
+}
