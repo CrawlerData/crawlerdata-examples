@@ -24,7 +24,10 @@ meta:
     language: python
     version: "3.12"
     entrypoint: main
+  minimum_dify_version: 1.7.1
 privacy: PRIVACY.md
+repo: https://github.com/CrawlerData/crawlerdata-examples/tree/main/dify/crawlerdata-google-search
+contact: contact@crawlerdata.com
 tags:
   - search
 created_at: 2026-10-17T00:00:00.000000000Z
